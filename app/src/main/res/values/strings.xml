@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ImplicitDemo</string>
+
+    <string name="bnUrl">Open website</string>
+    <string name="bnLoc">Open Location</string>
+    <string name="bnMessage">Send Message</string>
+    <string name="shareTitle">Share with:</string>
+
+</resources>
