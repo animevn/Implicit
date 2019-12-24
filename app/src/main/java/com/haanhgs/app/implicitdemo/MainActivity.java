@@ -21,7 +21,6 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     private static final String ETAG = "E.MainActivity";
-
     @BindView(R.id.etUrl)
     EditText etUrl;
     @BindView(R.id.bnUrl)
