@@ -2,11 +2,14 @@ package com.haanhgs.app.implicitdemo;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,13 +37,23 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.bnMessage)
     Button bnMessage;
 
+    @SuppressWarnings("deprecation")
     private void setFullScreenInLandscapeMode(){
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
-            if (getSupportActionBar() != null) getSupportActionBar().hide();
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (getDisplay() != null){
+            int rotation = getDisplay().getRotation();
+            if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+                if (getSupportActionBar() != null) getSupportActionBar().hide();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                    final WindowInsetsController controller = getWindow().getInsetsController();
+                    if (controller != null){
+                        controller.hide(WindowInsets.Type.statusBars());
+                    }
+                }else {
+                    getWindow().setFlags(
+                            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                            WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                }
+            }
         }
     }
 
@@ -64,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(etUrl.getText())){
             try{
                 String query = URLEncoder.encode(etUrl.getText().toString(), "UTF-8");
-                Uri uri = Uri.parse("https://www.google.com/#q=" + query);
+                Uri uri = Uri.parse("https://" + query);
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 openIntent(intent);
             }catch (UnsupportedEncodingException e){
